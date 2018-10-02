@@ -8,7 +8,7 @@ fi
 HOSTNAME=$1
 REDIRECT=$2
 
-if host -t A ${HOSTNAME} ; then echo OK; else echo "Domain does not resolve"; exit; fi
+if host -t A ${HOSTNAME} >/dev/null 2>/dev/null ; then echo OK; else echo "Domain does not resolve"; exit; fi
 
 echo "
 server {
