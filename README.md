@@ -11,3 +11,8 @@ gen-plex-cert.sh: SSL Certificates for Plex using letsencrypt
 
 gen-unifi-cert.sh: SSL Certificates for Unifi Controller using letsencrypt
 
+## Emby Scripts
+
+update-nfo.sh: script to generate emby .nfo files to set actor/actress for all movies in the directory (works recursive)
+
+
