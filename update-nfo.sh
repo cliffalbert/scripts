@@ -1,7 +1,12 @@
 #!/bin/sh
 
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+fi
+
 FILENAME=$(mktemp /tmp/tfile.XXXXXXXXXXX)
-ACTOR="Charlize Theron"
+ACTOR="$1"
 
 find ./ -type f | grep -v nfo > ${FILENAME}
 
