@@ -87,11 +87,11 @@ else
 fi
 
 if [[ ${onlyinsert} != "yes" ]]; then
-	echo "Firing up standalone authenticator on TCP port 443 and requesting cert..."
+	echo "Firing up standalone authenticator on TCP port 80 and requesting cert..."
 	${LEBINARY} \
 		--server https://acme-v01.api.letsencrypt.org/directory \
     	--agree-tos \
-		--standalone --preferred-challenges tls-sni \
+		--standalone --preferred-challenges http-01 \
     	${LEOPTIONS}
 fi    
 
