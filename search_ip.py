@@ -21,12 +21,20 @@ if args > 1:
     my_pfx_tenant = 'None'
     my_pfx_role = 'None'
     my_pfx_site = 'None'
+    my_vlan = 'None'
+    my_vlan_group = 'None'
+    my_vlan_description = 'None'
+
     if my_pfx.tenant:
         my_pfx_tenant = my_pfx.tenant.name
     if my_pfx.role:
         my_pfx_role = my_pfx.role.name
     if my_pfx.site:
         my_pfx_site = my_pfx.site.name
+    if my_pfx.vlan:
+        my_vlan = my_pfx.vlan.vid
+        my_vlan_group = my_pfx.vlan.group.name
+
     print('\033[92m' + fmt.format(*header))
     print('\033[93m' + 
         fmt.format(
@@ -43,13 +51,7 @@ if args > 1:
         print ('\033[94m-------------------------------------------------------------------------------------')
         fmt = "{:<20}{:<30}{:<40}{:<10}{:<20}"
         header = ("Address", "Tenant", "Description", "VLAN ID", "VLAN Group")
-        my_vlan = 'None'
-        my_vlan_group = 'None'
         my_tenant = 'None'
-        my_vlan_description = 'None'
-        if my_pfx.vlan:
-            my_vlan = my_pfx.vlan.vid
-            my_vlan_group = my_pfx.vlan.group.name
         if my_addr.tenant:
             my_tenant = my_addr.tenant.name
       
