@@ -11,6 +11,10 @@ gen-plex-cert.sh: SSL Certificates for Plex using letsencrypt
 
 gen-unifi-cert.sh: SSL Certificates for Unifi Controller using letsencrypt
 
+## Network Engineering
+
+search_ip.py: Generate overview of an IP address from Netbox
+
 ## Emby Scripts
 
 update-nfo.sh: script to generate emby .nfo files to set actor/actress for all movies in the directory (works recursive)
