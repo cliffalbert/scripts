@@ -35,5 +35,13 @@ rsync -av --exclude-from=/backup/backup.exclude --numeric-ids --link-dest=$LAST_
 
 touch $NEW_BACKUP_PATH
 
+# Sometimes rsync fails to connect and you end up with a file instead of a directory
+# This will make sure it gets removed so the next backup wont fail automatically
+#
+if [ -f $NEW_BACKUP_PATH ]; then
+	echo "ERROR: Something went wrong while backing up"
+	rm $NEW_BACKUP_PATH
+fi
+
 logger -t backup "backup $NEW_BACKUP_PATH stop"
 
