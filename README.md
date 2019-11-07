@@ -19,4 +19,8 @@ search_ip.py: Generate overview of an IP address from Netbox
 
 update-nfo.sh: script to generate emby .nfo files to set actor/actress for all movies in the directory (works recursive)
 
+## Maildir/MUTT scripts
+
+newmaildir.sh: script to do a monthly rotate on a maildir structure
+
 
