@@ -8,17 +8,17 @@ fi
 HOSTNAME=$1
 REDIRECT=$2
 
-if host -t A ${HOSTNAME} >/dev/null 2>/dev/null ; then echo OK; else echo "Domain does not resolve"; exit; fi
+if host -t A "${HOSTNAME}" >/dev/null 2>/dev/null ; then echo OK; else echo "Domain does not resolve"; exit; fi
 
 echo "
 server {
     listen 80;
     listen [::]:80;
-    server_name $1;
-    access_log /var/log/nginx/$1-access.log;
-    error_log /var/log/nginx/$1-error.log;
-    return 301 $2;
+    server_name $HOSTNAME;
+    access_log /var/log/nginx/$HOSTNAME-access.log;
+    error_log /var/log/nginx/$HOSTNAME-error.log;
+    return 301 $REDIRECT;
 }
-" > /etc/nginx/sites-enabled/$1.conf
+" > /etc/nginx/sites-enabled/"$HOSTNAME".conf
 
-echo "$1;$2" >> /etc/nginx/redirects.csv
+echo "$HOSTNAME;$REDIRECT" >> /etc/nginx/redirects.csv

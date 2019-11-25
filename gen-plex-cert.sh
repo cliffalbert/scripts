@@ -92,10 +92,10 @@ if [[ ${onlyinsert} != "yes" ]]; then
 		--server https://acme-v02.api.letsencrypt.org/directory \
     	--agree-tos \
 		--standalone --preferred-challenges http-01 \
-    	${LEOPTIONS}
+    	"${LEOPTIONS}"
 fi    
 
-if `md5sum -c /etc/letsencrypt/live/${MAINDOMAIN}/cert.pem.md5 &>/dev/null`; then
+if $(md5sum -c /etc/letsencrypt/live/"${MAINDOMAIN}"/cert.pem.md5 &>/dev/null); then
 	echo "Cert has not changed, not updating controller."
 	exit 0
 else
@@ -103,13 +103,13 @@ else
 	CATEMPFILE=$(mktemp)
 
 	echo "Cert has changed, updating controller..."
-	md5sum /etc/letsencrypt/live/${MAINDOMAIN}/cert.pem > /etc/letsencrypt/live/${MAINDOMAIN}/cert.pem.md5 
+	md5sum /etc/letsencrypt/live/"${MAINDOMAIN}"/cert.pem > /etc/letsencrypt/live/"${MAINDOMAIN}"/cert.pem.md5 
 	echo "Using openssl to prepare certificate..."
-	cat /etc/letsencrypt/live/${MAINDOMAIN}/chain.pem >> "${CATEMPFILE}"
+	cat /etc/letsencrypt/live/"${MAINDOMAIN}"/chain.pem >> "${CATEMPFILE}"
 	openssl pkcs12 -export -out "${TEMPFILE}" \
 	-passout pass:${KEYFILE_PASS} \
-    	-in /etc/letsencrypt/live/${MAINDOMAIN}/cert.pem \
-    	-inkey /etc/letsencrypt/live/${MAINDOMAIN}/privkey.pem \
+    	-in /etc/letsencrypt/live/"${MAINDOMAIN}"/cert.pem \
+    	-inkey /etc/letsencrypt/live/"${MAINDOMAIN}"/privkey.pem \
     	-out "${TEMPFILE}" -name plexmediaserver \
     	-CAfile "${CATEMPFILE}" -caname root
 	echo "Stopping Plex Media Server..."
@@ -121,3 +121,5 @@ else
 	service plexmediaserver start
 	echo "Done!"
 fi
+
+
