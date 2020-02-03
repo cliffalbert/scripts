@@ -7,6 +7,8 @@ backup.sh: remote rsync backup script with hard-link incremental support
 
 scan-pf-log.sh: check log entries for specific e-mail adres and show full log
 
+Makefile.postfix: Makefile to reload postfix and generate new .db/maps for postfix
+
 ## Letsencrypt Scripts
 
 gen-plex-cert.sh: SSL Certificates for Plex using letsencrypt

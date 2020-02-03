@@ -1,0 +1,17 @@
+# Makefile for /etc/postfix
+
+TARGETS := access.db canonical.db relocated.db transport.db \
+	client_access.db \
+	.build.mark
+
+all: $(TARGETS)
+	/etc/init.d/postfix reload
+
+aliases.db: /etc/aliases
+	/usr/sbin/postalias /etc/aliases
+
+.build.mark: main.cf master.cf 
+	touch .build.mark
+
+%.db: %
+	/usr/sbin/postmap $<
