@@ -1,5 +1,11 @@
 #!/bin/bash
 PEOPLE_ROOT="$HOME/People/" 
+if which exiftool; then
+	echo "Exiftool found"
+else
+	echo "Exiftool not found;exiting"
+	exit
+fi
 for i in *.jpg *.JPG; do 
 	NAMES=$(exiftool -RegionName "$i" | cut -d':' -f2 | sed -e 's/^\ *//')
 	FILENAME="$(pwd)/$i"
