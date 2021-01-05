@@ -24,6 +24,7 @@ search_tenant_resources_public.py: Generate overview of all prefixes of a tenant
 ## Emby Scripts
 
 update-nfo.sh: script to generate emby .nfo files to set actor/actress for all movies in the directory (works recursive)
+nfo-tool.pl: next generation based on update-nfo.sh rewrite in perl
 
 ## Maildir/MUTT scripts
 
