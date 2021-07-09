@@ -49,8 +49,8 @@ fi
 		
 
 # Command line options depending on New or Renew.
-NEWCERT="--renew-by-default certonly"
-RENEWCERT="-n renew"
+NEWCERT="--no-self-upgrade --renew-by-default certonly"
+RENEWCERT="--no-self-upgrade -n renew"
 
 if [[ ! -x ${LEBINARY} ]]; then
 	echo "Error: LetsEncrypt binary not found in ${LEBINARY} !"
@@ -91,7 +91,7 @@ if [[ ${onlyinsert} != "yes" ]]; then
 	${LEBINARY} \
 		--server https://acme-v02.api.letsencrypt.org/directory \
     	--agree-tos \
-		--standalone --preferred-challenges http-01 \
+		--standalone \
     	"${LEOPTIONS}"
 fi    
 
