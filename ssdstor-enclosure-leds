@@ -1,0 +1,123 @@
+#!/bin/bash
+
+if [ $(id -u) -ne 0 ]; then
+  echo "ERROR: $0 must be run as root!"
+  exit 255
+fi
+
+if [[ -x $(which tput) ]]; then
+  UND=$(tput smul)
+  RED=$(tput setab 1 setaf 7; tput bold)
+  GRE=$(tput setab 2 setaf 7; tput bold)
+  BLU=$(tput setab 4 setaf 7; tput bold)
+  RST=$(tput sgr0)
+fi
+
+IFS=$'\n'
+for SLOT in $(ls -d1 /sys/class/enclosure/*/*/fault | sed 's#/fault##g'); do
+  DEV=$(ls -d1 ${SLOT}/device/block/sd* 2>/dev/null | awk -F '/' '{print $9}')
+
+  if [[ "${DEV}" != "" ]]; then
+    MODEL=$(cat ${SLOT}/device/block/${DEV}/device/model 2>/dev/null)
+
+    MD=$(find /sys/block/md*/slaves/sd* -name ${DEV} 2>/dev/null | awk -F '/' '{print $4}')
+
+    if [[ "${MD}" == "" ]]; then
+      MD='???'
+    fi
+
+    STATE=$(cat /sys/devices/virtual/block/${MD}/md/dev-${DEV}/state 2>/dev/null)
+    if [[ "${STATE}" == "" ]]; then
+      STATE='???????'
+    fi
+
+    if [[ "${MODEL}" != "" ]]; then
+      SMART="SMARTGOOD"
+
+      smartctl --health --quietmode=errorsonly /dev/${DEV} 2>/dev/null 1>&2
+      if [[ $? -ne 0 ]]; then
+        SMART="SMARTFAIL"
+      fi
+
+      smartctl --attributes --log=selftest --quietmode=errorsonly /dev/${DEV} 2>/dev/null 1>&2
+      if [[ $? -ne 0 ]]; then
+        SMART="SMARTFAIL"
+      fi
+
+    fi
+  else
+    STATE='???????'
+    DEV='????'
+    MD='???'
+    MODEL='????????????????'
+  fi
+
+
+  printf "%-18s   " "${SLOT/\/sys\/class\/enclosure\/}"
+
+  case ${STATE} in
+    in_sync)
+      printf "${GRE}%-7s${RST}   " "${STATE}"
+    ;;
+    spare)
+      printf "${BLU}%-7s${RST}   " "${STATE}"
+    ;;
+    faulty)
+      printf "${RED}%-7s${RST}   " "${STATE}"
+    ;;
+    *)
+      printf "${RED}%-7s${RST}   " "${STATE}"
+    ;;
+  esac
+
+  if [[ "${DEV}" == '????' ]]; then
+    printf "${RED}%-4s${RST}   " "${DEV}"
+  else
+    printf "%-4s   " "${DEV}"
+  fi
+
+  if [[ "${MD}" == '???' ]]; then
+    printf "${RED}%-3s${RST}   " "${MD}"
+  else
+    printf "%-3s   " "${MD}"
+  fi
+
+  if [[ "${MODEL}" == '????????????????' ]]; then
+    printf "${RED}%-10s${RST}   " "${MODEL}"
+  else
+    printf "${UND}%-10s${RST}   " "${MODEL}"
+  fi
+
+  if [[ "${SMART}" == 'SMARTFAIL' ]]; then
+    printf "${RED}%-9s${RST}   " "${SMART}"
+  else
+    printf "%-9s   " "${SMART}"
+  fi
+
+  if [[ $(cat ${SLOT}/fault) -ne 0 ]]; then
+    printf "fault_before: ${RED}%-1s${RST}   " "$(cat ${SLOT}/fault)"
+  else
+    printf "fault_before: %-1s   " "$(cat ${SLOT}/fault)"
+  fi
+
+  if [[ "${MD}" == '???' || "${SMART}" != "SMARTGOOD" || ${STATE} == "faulty" ]]; then
+    echo 1 > $SLOT/fault
+  else
+    echo 0 > $SLOT/fault
+  fi
+
+  if [[ $(cat ${SLOT}/fault) -ne 0 ]]; then
+    printf "fault_after: ${RED}%-1s${RST}   " "$(cat ${SLOT}/fault)"
+  else
+    printf "fault_after: %-1s   " "$(cat ${SLOT}/fault)"
+  fi
+
+  if [[ $(cat ${SLOT}/locate) -ne 0 ]]; then
+    printf "locate: ${BLU}%-1s${RST}   " "$(cat ${SLOT}/locate)"
+  else
+    printf "locate: %-1s   " "$(cat ${SLOT}/locate)"
+  fi
+
+  printf "\n"
+done
+
