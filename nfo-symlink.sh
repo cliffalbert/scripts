@@ -16,9 +16,15 @@ if [ -e "${FILE}" ]; then
 		if [ -f "${NFO_TARGET}" ]; then
 			echo "N2: ${NFO_TARGET}"
 			if [ -e "${NFO}" ]; then
-				echo "NFO source exists"
-				diff -u "${NFO}" "${NFO_TARGET}"
-				exit 2
+				if [ -h "${NFO}" ]; then
+					NFO_ACT_LINK=$(readlink "${NFO}")
+					echo "NFO already linked ${NFO_ACT_LINK}" 
+					exit 1
+				else 
+					echo "NFO source exists"
+					diff -u "${NFO}" "${NFO_TARGET}"
+					exit 2
+				fi
 			else
 				ln -s "${NFO_TARGET}" "${NFO}"
 				echo "Linked ${NFO_TARGET} to ${NFO}"
