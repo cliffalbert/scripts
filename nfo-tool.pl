@@ -59,7 +59,7 @@ or die("Error in command line arguments\n");
 		    if ($parse =~ /<studio>$studio</ ) {
 		      $studio_exists = 1;
                     } else {
-                      $studio_exists = 1;
+                      $studio_exists = 0;
                       $studio_differs = 1;
                     }
 		    if ($debug) {
