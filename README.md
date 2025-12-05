@@ -1,5 +1,9 @@
 # scripts
 
+This is a mirror of the original git repo in my personal forgejo
+
+https://oisec.net/
+
 ## Server maintenance and operations
 produce-redirect.sh: produce nginx configuration files for URL redirection
 
