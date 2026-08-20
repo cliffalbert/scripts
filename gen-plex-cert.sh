@@ -14,7 +14,16 @@
 
 PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-KEYFILE_PASS="mekkermekkermekker"
+# Previous default "mekkermekkermekker" was committed to git — treat as compromised.
+# Export a new secret and set the same value as Plex's custom certificate password.
+KEYFILE_PASS="${PLEX_KEYFILE_PASS:-}"
+if [[ -z "${KEYFILE_PASS}" ]]; then
+	echo "Error: PLEX_KEYFILE_PASS is not set."
+	echo "The previous hardcoded PKCS12 password was committed to git and is compromised."
+	echo "Export PLEX_KEYFILE_PASS to a new secret and set the same value in Plex"
+	echo "(Settings → Network → Custom certificate encryption key)."
+	exit 1
+fi
 
 while getopts "ird:e:" opt; do
     case $opt in
@@ -107,7 +116,7 @@ else
 	echo "Using openssl to prepare certificate..."
 	cat /etc/letsencrypt/live/"${MAINDOMAIN}"/chain.pem >> "${CATEMPFILE}"
 	openssl pkcs12 -export -out "${TEMPFILE}" \
-	-passout pass:${KEYFILE_PASS} \
+	-passout pass:"${KEYFILE_PASS}" \
     	-in /etc/letsencrypt/live/"${MAINDOMAIN}"/cert.pem \
     	-inkey /etc/letsencrypt/live/"${MAINDOMAIN}"/privkey.pem \
     	-out "${TEMPFILE}" -name plexmediaserver \
