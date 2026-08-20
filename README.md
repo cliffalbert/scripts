@@ -43,3 +43,5 @@ newmaildir.sh: script to do a monthly rotate on a maildir structure
 
 exif-people-symlink.sh: extract exif people tag (Picasa) and symlink into persons directory
 
+## Ansible / AWX / AAP
+awx-check.py: extracts all job templates with configured limits
