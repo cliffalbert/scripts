@@ -60,7 +60,7 @@ rename-ascii.py: strip non-ASCII characters from filenames in the current direct
 
 awx-check.py: extracts all job templates with configured limits. Token via `AWX_TOKEN` or `--token`; URL via `AWX_URL`.
 
-awx-inventory.py: dump AWX inventories as a YAML inventory with child groups
+awx-inventory.py: dump AWX inventories as an Ansible YAML inventory. Each AWX inventory is a child group, with its host groups kept. Disabled hosts are omitted. Host descriptions come from AWX; a host with none is marked "Auto Added by AWX Inventory". Token via `AWX_TOKEN` or `--token`; URL via `AWX_URL`.
 
 ## Torrents
 
