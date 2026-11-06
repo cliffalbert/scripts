@@ -1,8 +1,6 @@
 # scripts
 
-This is a mirror of the original git repo in my personal forgejo
-
-https://oisec.net/
+This has been moved to forgejo at https://gitea.oisec.net/cliff/scripts
 
 Destructive scripts (delete or overwrite data): `backup-clean.sh`, `orphan-nfo.sh`, `rename-ascii.py`, `rtorrent-check.py`, `update-nfo.sh`.
 
